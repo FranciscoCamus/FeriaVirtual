@@ -1,0 +1,87 @@
+{% extends "FeriaVirtualApp/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar usuarios</title>
+</head>
+  
+
+
+  <div class="container">
+    <!-- Centra el título horizontalmente -->
+    <h1 class="text-white text-center">Administrar usuarios</h1>
+
+    <!-- Envuelve la tabla en un div con ancho definido y usa mx-auto -->
+    <div class="table-responsive mx-auto" style="width: 75%;">
+      <table class="table table-striped table-bordered bg-white">
+        <thead class="thead-dark">
+          <tr>
+            <!-- Agrega la clase text-center para centrar los encabezados de columna -->
+            <th class="text-white text-center">Username</th>
+            <th class="text-white text-center">Email</th>
+            <th class="text-white text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usuario in usuarios %}
+            <tr>
+              <td class="text-black text-center">{{ usuario.username }}</td>
+              <td class="text-black text-center">{{ usuario.email }}</td>
+              <td class="text-center"> <!-- Aplica text-center para centrar los botones -->
+                <div class="d-flex justify-content-center"> <!-- Crea un contenedor flexible y centra su contenido -->
+                  <a class="btn btn-primary mr-2" href="{% url 'AutenticacionApp:actualizar_usuario' usuario.id %}" style="height: 38px; line-height: 1;">Editar</a>
+                  <a class="btn btn-danger" href="#" onclick="confirmarEliminacion(event, '{{ usuario.id }}')">Eliminar</a>
+
+
+
+                  
+                </div>
+              </td>
+              
+              <!-- Agrega el siguiente script al final de tu archivo lista_usuarios.html para mostrar el mensaje de confirmación -->
+              <script>
+                function confirmarEliminacion(event, id) {
+                  event.preventDefault(); // Evita que el enlace se siga inmediatamente
+              
+                  const url = "{% url 'AutenticacionApp:eliminar_usuario' 0 %}".replace("0", id);
+              
+                  Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: 'Esta acción eliminará al usuario. ¿Deseas continuar?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Sí, eliminar',
+                    reverseButtons: true,
+                    confirmButtonColor: "#dc3545"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      // Si el usuario confirma, redirige a la URL de eliminación
+                      window.location.href = url;
+                    }
+                  });
+                }
+              </script>
+              
+              
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Centra el botón horizontalmente y ocupa todo el ancho del contenedor -->
+    <div class="text-center" style="width: 75%; margin: 0 auto;">
+      <a class="btn btn-success btn-block" href="{% url 'AutenticacionApp:crear_usuario' %}">Crear Usuario</a>
+    </div>
+  </div>
+{% endblock %}

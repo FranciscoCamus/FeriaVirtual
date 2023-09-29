@@ -1,0 +1,92 @@
+{% extends "FeriaVirtualApp/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<script>
+  // Verifica si existe un parámetro 'exito' en la URL para mostrar la alerta
+  const urlParams = new URLSearchParams(window.location.search);
+  const exito = urlParams.get('exito');
+  
+  if (exito) {
+    alert('Usuario creado con éxito.');
+  }
+</script>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario del usuario</title>
+</head>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title">Formulario de Usuario</h1>
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="{{ formulario.username.id_for_label }}">{{ formulario.username.label }}:</label>
+              {{ formulario.username }}
+            </div>
+            <div class="form-group">
+              <label for="{{ formulario.first_name.id_for_label }}">{{ formulario.first_name.label }}:</label>
+              {{ formulario.first_name }}
+            </div>
+            <div class="form-group">
+              <label for="{{ formulario.last_name.id_for_label }}">{{ formulario.last_name.label }}:</label>
+              {{ formulario.last_name }}
+            </div>
+            <div class="form-group">
+              <label for="{{ formulario.email.id_for_label }}">{{ formulario.email.label }}:</label>
+              {{ formulario.email }}
+            </div>
+            <div class="form-group">
+              <label for="{{ formulario.password1.id_for_label }}">{{ formulario.password1.label }}:</label>
+              {{ formulario.password1 }}
+            </div>
+            <div class="form-group">
+              <label for="{{ formulario.password2.id_for_label }}">{{ formulario.password2.label }}:</label>
+              {{ formulario.password2 }}
+            </div>
+            <!-- Envuelve el botón en un div para centrarlo verticalmente -->
+            <div class="text-center">
+              <button type="submit" class="btn btn-success btn-lg btn-block">Guardar</button>
+            </div>
+          </form>
+          <!-- Enlace convertido en botón -->
+          <div class="text-center mt-3">
+            <a href="{% url 'AutenticacionApp:lista_usuarios' %}" class="btn btn-primary btn-lg btn-block">Volver a la lista de usuarios</a>
+          </div>
+          
+          {% if formulario.errors %}
+          <div class="alert alert-danger mt-3">
+            <strong>Error al ingresar la información:</strong>
+            <ul>
+              {% for field, errors in formulario.errors.items %}
+                {% for error in errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
